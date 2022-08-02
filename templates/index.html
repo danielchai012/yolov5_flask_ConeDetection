@@ -20,26 +20,55 @@
       <div class="col-6">
         <h1>Yolo V5測試</h1>
           <h2>Edit Note</h2>
-          <form action="/recon" method="post" enctype="multipart/form-data">
+          <form class="was-validated" action="/recon" method="post" enctype="multipart/form-data">
             <div class="mb-3">
               <label for="formFile" class="form-label">Image Input</label>
-              <input class="form-control" name="recon_file" type="file" id="formFile">
-              <button type="submit" class="btn btn-primary mt-2">Submit</button>
+              <div class="mb-3">
+                <input class="form-control" name="recon_file" type="file" id="formFile" onchange="readURL(this)" required>
+                <div class="invalid-feedback">輸入圖片</div>
+                <h6 id="result">{{result}}</h6>
+              </div>
+              <button type="submit" class="btn btn-primary mt-2" onclick='submited(this)'>Submit</button>
             </div>
           </form>
         
       </div>
-      <div class="col">
+      <div class="col-4">
       </div>
       <div class="row">
         <div class="col-6">
-          <img src="{{image}}" class="img-fluid" height="400px">
-
+          Input
+          <img src="{{image}}" id="input" class="img-fluid" height="200px">
+          <div class="ratio ratio-16x9">
+            <iframe src="{{image}}" id="inputvideo" title="YouTube video" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="col-6">
+          Output
+          <img src="{{output_img}}"  id="output" class="img-fluid" height="600px">
         </div>
       </div>
     </div>
-
   </div>
+  <script>
+  function submited(button){
+    button.form.submit(); 
+    button.disabled=true;
+    button.innerText='Sending…'  ;
+    document.querySelector("#formFile").setAttribute("disabled",true);
+  }
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) { 
+        document.querySelector("#input").setAttribute("src",e.target.result);
+        // document.querySelector("#inputvideo").setAttribute("src",e.target.result);
+      };
+      reader.readAsDataURL(input.files[0]); 
+    }
+    document.getElementById("result").remove();
+  }
+  </script>
 </body>
 
 </html>
