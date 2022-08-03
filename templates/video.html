@@ -43,21 +43,24 @@
       <div class="col-6">
         Input
         <img src="{{image}}" id="input" class="img-fluid" height="200px">
-        <img src="" id="videostream">
+        <a class="btn btn-primary mt-2" href='/static/img/1.mp4' id="webcambutton" role="button">Download Video</a>
+        <video height="400px" controls>
+          <source src='./static/img/1.mp4' type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
         <!-- <div class="ratio ratio-16x9">
             <iframe src="{{image}}" id="inputvideo" title="YouTube video" allowfullscreen></iframe>
-          </div> -->
-          <!-- <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="./static/1.mp4" allowfullscreen></iframe>
           </div> -->
       </div>
       <div class="col-6">
         Output
         <!-- <a href="{{output_img}}" class="text-primary">預覽</a> -->
-        <img src="{{output_img}}" id="output" class="img-fluid" height="600px">
-        <!-- <video height="400px" controls>
-          <source src='./static/1.mp4' type="video/mp4"> 
-        </video> -->
+        <!-- <img src="{{output_img}}" id="output" class="img-fluid" height="600px"> -->
+        <a class="btn btn-primary mt-2" href='/static/output/1.mp4' id="webcambutton" role="button">Download Video</a>
+        <video height="400px" controls>
+          <source src='./static/output/1.mp4' type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
       </div>
     </div>
   </div>
