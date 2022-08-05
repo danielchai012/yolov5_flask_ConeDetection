@@ -5,11 +5,12 @@ from flask_bootstrap import Bootstrap
 import os ,cv2
 from importlib import import_module
 import subprocess
+from yolov5_flask import Camera
 camera = cv2.VideoCapture(0)
 app = Flask(__name__)
 Bootstrap(app)
 INPUT_DIR="C:/Users/ITM_Student_11/Desktop/yolov5/static/img"
-WEIGHTS = "C:/Users/ITM_Student_11/Desktop/yolov5/runs/train/exp12/weights/last.pt"
+WEIGHTS = "C:/Users/ITM_Student_11/Desktop/yolov5/runs/train/exp9/weights/last.pt"
 FILE_TYPES = set(['bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp','asf', 'avi', 'gif', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv'])
 VIDEO_TYPES = set(['asf', 'avi', 'gif', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv'])
 output_path = "C:/Users/ITM_Student_11/Desktop/yolov5/static/"
@@ -33,9 +34,9 @@ def recon():
                     # return redirect(url_for('recon', image=saved_path,output_img=output_file))
                     if '.' in newfilename and newfilename.rsplit('.', 1)[1] in VIDEO_TYPES:
                         subprocess.run(f"python detect.py --weights {WEIGHTS} --source {upload_path} --conf-thres 0.5 --project {output_path} --name output --exist-ok")
-                        return render_template('video.html')
+                        return render_template('video.html',image=saved_path,result='Success',output_video='./static/output/1.mp4')
                     else:
-                        subprocess.run(f"python detect.py --weights {WEIGHTS} --source {upload_path} --conf-thres 0.5 --project {output_path} --name output --exist-ok")
+                        output=subprocess.check_output(f"python detect.py --weights {WEIGHTS} --source {upload_path} --conf-thres 0.5 --project {output_path} --name output --exist-ok")
                         output_file = './static/output/'+newfilename
                         return render_template('index.html',image=saved_path,output_img=output_file,result='Success',output_video='./static/output/1.mp4')
                 else:
@@ -53,7 +54,7 @@ def recon():
 @app.route("/webcam",methods=['GET'])
 def open_webcam():
     try:
-        subprocess.run(f"python detect.py --weights {WEIGHTS} --source 0 --conf-thres 0.5 --project {output_path} --name output --exist-ok")
+        subprocess.run(f"python detect.py --weights {WEIGHTS} --source http://127.0.0.1:5000/local_feed --conf-thres 0.5 --project {output_path} --name output --exist-ok")
         return redirect(url_for('recon'))
     except:
         return redirect(url_for('recon'))
@@ -67,10 +68,15 @@ def home():
 @app.route('/video_feed')
 def video_feed():
     """Video streaming route. Put this in the src attribute of an img tag."""
-    return Response(gen(camera),
+    return Response(gen(Camera()),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+@app.route('/local_feed')
+def local_feed():
+    """Video streaming route. Put this in the src attribute of an img tag."""
+    return Response(local_gen(camera),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-def gen(camera):
+def local_gen(camera):
     """Video streaming generator function."""
     while True:
         success, frame = camera.read()
@@ -81,7 +87,18 @@ def gen(camera):
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
+def gen(objcamera):
+    """Video streaming generator function."""
+    while True:
+        frame = objcamera.get_frame()
+        # a = camera.people_appeal()
+        # print('a:{}0'.format(a))
+        # for i in a:
+        #     if i =='people':
+        #         print('是people：{}}')
+        #         people_appeal()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 if __name__ == '__main__':
     app.run()

@@ -29,6 +29,7 @@
               <input class="form-control" name="recon_file" type="file" id="formFile" onchange="readURL(this)" required>
               <div class="invalid-feedback">輸入圖片</div>
               <h6 id="result">{{result}}</h6>
+              <i class="fal fa-solid fa-spinner fa-fw fa-xl margin-right-md fa-spin" id="loadingicon"style="color: var(--white) ; --fa-animation-duration:2s;display:none " ></i>
             </div>
             <button type="submit" class="btn btn-primary mt-2" id="submitbutton" onclick='submited(this)'>Submit</button>
             <button type="button" class="btn btn-primary mt-2" id="webcambutton" onclick='webcam(this)'>Webcam</button>
@@ -42,7 +43,7 @@
     <div class="row ">
       <div class="col-6">
         Input
-        <img src="{{image}}" id="input" class="img-fluid" height="200px">
+        <img src="" id="input" class="img-fluid" height="200px">
         <a class="btn btn-primary mt-2" href='/static/img/1.mp4' id="webcambutton" role="button">Download Video</a>
         <video height="400px" controls>
           <source src='./static/img/1.mp4' type="video/mp4">
@@ -71,8 +72,10 @@
       // button = document.querySelector("#submit");
       button.form.submit();
       document.querySelector("#webcambutton").setAttribute("disabled", true);
+      document.querySelector("#streambutton").setAttribute("disabled", true);
       button.disabled = true;
       button.innerText = 'Sending…';
+      document.getElementById("loadingicon").style.display = "block";
       document.getElementById("result").innerText = "Loading...";
       document.querySelector("#formFile").setAttribute("disabled", true);
     }
@@ -92,7 +95,9 @@
       button.disabled = true;
       button.innerText = 'Opening…';
       document.getElementById("webcambutton").innerText = "Loading...";
+      document.getElementById("loadingicon").style.display = "block";
       document.querySelector("#formFile").setAttribute("disabled", true);
+      document.querySelector("#streambutton").setAttribute("disabled", true);
       document.querySelector("#submitbutton").setAttribute("disabled", true);
     }
     function stream(button) {
@@ -104,6 +109,7 @@
         document.querySelector("#formFile").setAttribute("disabled", true);
         document.querySelector("#submitbutton").setAttribute("disabled", true);
         document.querySelector("#webcambutton").setAttribute("disabled", true);
+        document.getElementById("loadingicon").style.display = "block";
         document.getElementById("input").setAttribute("src", '/video_feed');
       } 
       else{
@@ -114,6 +120,7 @@
         document.querySelector("#submitbutton").removeAttribute("disabled");
         document.querySelector("#webcambutton").removeAttribute("disabled");
         document.getElementById("videostream").setAttribute("src", '');
+        document.getElementById("loadingicon").style.display = "none";
         document.getElementById("input").setAttribute("src", "{{output_img}}");
 
       }
