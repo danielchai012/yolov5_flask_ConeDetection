@@ -1,19 +1,17 @@
 from distutils.log import error
 from tkinter import E
 from flask import Flask, render_template,request, render_template, Response ,redirect , url_for
-from flask_bootstrap import Bootstrap
 import os ,cv2
 from importlib import import_module
 import subprocess
 from yolov5_flask import Camera
 camera = cv2.VideoCapture(0)
 app = Flask(__name__)
-Bootstrap(app)
-INPUT_DIR="C:/Users/ITM_Student_11/Desktop/yolov5/static/img"
-WEIGHTS = "C:/Users/ITM_Student_11/Desktop/yolov5/runs/train/exp9/weights/last.pt"
+INPUT_DIR="./static/img"
+WEIGHTS = "./last.pt"
 FILE_TYPES = set(['bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp','asf', 'avi', 'gif', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv'])
 VIDEO_TYPES = set(['asf', 'avi', 'gif', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv'])
-output_path = "C:/Users/ITM_Student_11/Desktop/yolov5/static/"
+output_path = "./static/"
 @app.route("/recon",methods=['POST', 'GET'])
 def recon():
     try:

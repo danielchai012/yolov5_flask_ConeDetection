@@ -31,7 +31,7 @@ class Camera(BaseCamera):
     
     def __init__(self):
         video_source = 0
-        weights=ROOT / 'C:/Users/ITM_Student_11/Desktop/yolov5/runs/train/exp12/weights/last.pt'  # model.pt path(s)
+        weights=ROOT / './last.pt'  # model.pt path(s)
         source=ROOT / 'data/images'  # file/dir/URL/glob, 0 for webcam
         data=ROOT / 'data/coco128.yaml'  # dataset.yaml path
         imgsz=(640, 640)  # inference size (height, width)
@@ -81,7 +81,7 @@ class Camera(BaseCamera):
         video_source = 0
         source = '0'
 
-        weights='C:/Users/ITM_Student_11/Desktop/yolov5/runs/train/exp12/weights/last.pt'  # model.pt path(s)
+        weights='./last.pt'  # model.pt path(s)
         data=ROOT / 'data/coco128.yaml'  # dataset.yaml path
         imgsz=(640, 640)  # inference size (height, width)
         conf_thres=0.5  # confidence threshold
